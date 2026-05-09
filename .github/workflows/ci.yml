@@ -13,5 +13,5 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'maven'
+          cache: 'maven' # 缓存
       - run: mvn clean package
