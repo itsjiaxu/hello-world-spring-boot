@@ -31,3 +31,15 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ github.sha }}
             ${{ secrets.DOCKER_USERNAME }}/hello-world:latest
+
+      - name: Deploy to server
+        if: matrix.java-version == 8
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/hello-world
+            docker compose pull
+            docker compose up -d
