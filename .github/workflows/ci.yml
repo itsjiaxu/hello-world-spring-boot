@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: [master]
-
+# trigger rebuild
 jobs:
   build:
     runs-on: ubuntu-latest
