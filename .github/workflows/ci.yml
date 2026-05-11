@@ -20,12 +20,6 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - run: mvn clean package
-
-      - name: Check jar contents
-        if: matrix.java-version == 17
-        run: |
-          ls -la target/
-          unzip -p target/myproject-0.0.1-SNAPSHOT.jar BOOT-INF/lib/spring-boot-*.jar 2>/dev/null | strings | grep "Spring Boot" | head -3
       
       # 只在 Java 17 上构建和推送镜像，避免重复推两次
       - name: Login to Docker Hub
@@ -40,4 +34,5 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          no-cache: true
           tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ github.sha }}
