@@ -3,13 +3,13 @@ name: CI
 on:
   push:
     branches: [master]
-# trigger rebuild 2
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: [17, 21]
+        java-version: [8, 11]
 
     steps:
       - uses: actions/checkout@v4
@@ -19,18 +19,18 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
           cache: 'maven'
+
       - run: mvn clean package
-      
-      # 只在 Java 17 上构建和推送镜像，避免重复推两次
+
       - name: Login to Docker Hub
-        if: matrix.java-version == 17
+        if: matrix.java-version == 8
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
-        if: matrix.java-version == 17
+        if: matrix.java-version == 8
         uses: docker/build-push-action@v5
         with:
           push: true
